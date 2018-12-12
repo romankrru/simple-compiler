@@ -1,15 +1,16 @@
 // Tokenizer: (add 2 (subtract 4 2))   =>   [{ type: 'paren', value: '(' }, ...]
+import {tokenTypes} from '../generic';
 
 function tokenizer(input) {
 	let current = 0;
-	let tokens = [];
+	const tokens = [];
 
 	while (current < input.length) {
 		let char = input[current];
 
 		if (char === '(') {
 			tokens.push({
-				type: 'paren',
+				type: tokenTypes.PAREN,
 				value: '(',
 			});
 
@@ -19,7 +20,7 @@ function tokenizer(input) {
 
 		if (char === ')') {
 			tokens.push({
-				type: 'paren',
+				type: tokenTypes.PAREN,
 				value: ')',
 			});
 
@@ -27,14 +28,13 @@ function tokenizer(input) {
 			continue;
 		}
 
-		let WHITESPACE = /\s/;
-
-		if (WHITESPACE.test(char)) {
+		// WHITESPACE
+		if (/\s/.test(char)) {
 			current++;
 			continue;
 		}
 
-		let NUMBERS = /[0-9]/;
+		const NUMBERS = /[0-9]/;
 
 		if (NUMBERS.test(char)) {
 			let value = '';
@@ -44,10 +44,11 @@ function tokenizer(input) {
 				char = input[++current];
 			}
 
-			tokens.push({type: 'number', value});
+			tokens.push({type: tokenTypes.NUMBER, value});
 			continue;
 		}
 
+		// STRING
 		if (char === '"') {
 			let value = '';
 			char = input[++current];
@@ -60,10 +61,10 @@ function tokenizer(input) {
 			// Skip closing double quote
 			char = input[++current];
 
-			tokens.push({type: 'string', value});
+			tokens.push({type: tokenTypes.STRING, value});
 		}
 
-		let LETTERS = /[a-z]/i;
+		const LETTERS = /[a-z]/i;
 
 		if (LETTERS.test(char)) {
 			let value = '';
@@ -73,7 +74,7 @@ function tokenizer(input) {
 				char = input[++current];
 			}
 
-			tokens.push({type: 'name', value});
+			tokens.push({type: tokenTypes.NAME, value});
 			continue;
 		}
 

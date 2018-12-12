@@ -1,41 +1,42 @@
 // Transformer: takes the AST and passes it to traverser with a visitor.
 // Returns new AST.
 import traverser from './traverser';
+import {nodeTypes} from '../generic';
 
 function transformer(ast) {
-	let newAst = {
-		type: 'Program',
+	const newAst = {
+		type: nodeTypes.Program,
 		body: [],
 	};
 
 	ast._context = newAst.body;
 
 	traverser(ast, {
-		NumberLiteral: {
+		[nodeTypes.NumberLiteral]: {
 			enter(node, parent) {
 				parent._context.push({
-					type: 'NumberLiteral',
+					type: nodeTypes.NumberLiteral,
 					value: node.value,
 				});
 			},
 		},
 
-		StringLiteral: {
+		[nodeTypes.StringLiteral]: {
 			enter(node, parent) {
 				parent._context.push({
-					type: 'StringLiteral',
+					type: nodeTypes.StringLiteral,
 					value: node.value,
 				});
 			},
 		},
 
-		CallExpression: {
+		[nodeTypes.CallExpression]: {
 			enter(node, parent) {
 				let expression = {
-					type: 'CallExpression',
+					type: nodeTypes.CallExpression,
 
 					callee: {
-						type: 'Identifier',
+						type: nodeTypes.Identifier,
 						name: node.name,
 					},
 
@@ -44,9 +45,9 @@ function transformer(ast) {
 
 				node._context = expression.arguments;
 
-				if (parent.type !== 'CallExpression') {
+				if (parent.type !== nodeTypes.CallExpression) {
 					expression = {
-						type: 'ExpressionStatement',
+						type: nodeTypes.ExpressionStatement,
 						expression: expression,
 					};
 				}

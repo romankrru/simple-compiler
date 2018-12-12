@@ -1,3 +1,5 @@
+import {nodeTypes} from '../../generic';
+
 function traverser(ast, visitor) {
 	function traverseArray(array, parent) {
 		array.forEach(child => {
@@ -6,23 +8,23 @@ function traverser(ast, visitor) {
 	}
 
 	function traverseNode(node, parent) {
-		let methods = visitor[node.type];
+		const methods = visitor[node.type];
 
 		if (methods && methods.enter) {
 			methods.enter(node, parent);
 		}
 
 		switch(node.type) {
-			case 'Program':
+			case nodeTypes.Program:
 				traverseArray(node.body, node);
 				break;
 
-			case 'CallExpression':
+			case nodeTypes.CallExpression:
 				traverseArray(node.params, node);
 				break;
 
-			case 'NumberLiteral':
-			case 'StringLiteral':
+			case nodeTypes.NumberLiteral:
+			case nodeTypes.StringLiteral:
 				break;
 
 			default:

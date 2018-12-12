@@ -1,5 +1,6 @@
 // Parser: takes array of tokens, returns AST
 // [{ type: 'paren', value: '(' }, ...]   =>   { type: 'Program', body: [...] }
+import {tokenTypes, nodeTypes} from '../generic';
 
 function parser(tokens) {
 	let current = 0;
@@ -7,32 +8,32 @@ function parser(tokens) {
 	function walk() {
 		let token = tokens[current];
 
-		if (token.type === 'number') {
+		if (token.type === tokenTypes.NUMBER) {
 			current++;
 
 			return {
-				type: 'NumberLiteral',
+				type: nodeTypes.NumberLiteral,
 				value: token.value,
 			};
 		}
 
-		if (token.type === 'string') {
+		if (token.type === tokenTypes.STRING) {
 			current++;
 
 			return {
-				type: 'StringLiteral',
+				type: nodeTypes.StringLiteral,
 				value: token.value,
 			};
 		}
 
 		if (
-			token.type === 'paren' &&
+			token.type === tokenTypes.PAREN &&
 			token.value === '('
 		) {
 			token = tokens[++current];
 
-			let node = {
-				type: 'CallExpression',
+			const node = {
+				type: nodeTypes.CallExpression,
 				name: token.value,
 				params: [],
 			};
@@ -40,8 +41,8 @@ function parser(tokens) {
 			token = tokens[++current];
 
 			while (
-				(token.type !== 'paren') ||
-				(token.type === 'paren' && token.value !== ')')
+				(token.type !== tokenTypes.PAREN) ||
+				(token.type === tokenTypes.PAREN && token.value !== ')')
 			) {
 				node.params.push(walk());
 				token = tokens[current];
@@ -55,8 +56,8 @@ function parser(tokens) {
 		throw new TypeError('Unknown token type: ' + token.type);
 	}
 
-	let ast = {
-		type: 'Program',
+	const ast = {
+		type: nodeTypes.Program,
 		body: [],
 	}
 

@@ -1,31 +1,30 @@
 // Code Generator: prints tree into string
+import {nodeTypes} from '../generic';
 
 function codeGenerator(node) {
 	switch(node.type) {
-		case 'Program':
+		case nodeTypes.Program:
 			return node.body.map(codeGenerator).join('\n');
 
-		case 'ExpressionStatement':
-			return (
-				codeGenerator(node.expression) + ';'
-			);
+		case nodeTypes.ExpressionStatement:
+			return `${codeGenerator(node.expression)};`;
 
-		case 'CallExpression':
-			return (
-				codeGenerator(node.callee) +
-				'(' +
-				node.arguments.map(codeGenerator).join(', ') +
-				')'
-			);
+		case nodeTypes.CallExpression:
+			return [
+				codeGenerator(node.callee),
+				'(',
+				node.arguments.map(codeGenerator).join(', '),
+				')',
+			].join('');
 
-		case 'Identifier':
+		case nodeTypes.Identifier:
 			return node.name;
 
-		case 'NumberLiteral':
+		case nodeTypes.NumberLiteral:
 			return node.value;
 
-		case 'StringLiteral':
-			return '"' + node.value + '"';
+		case nodeTypes.StringLiteral:
+			return `"${node.value}"`;
 
 		default:
 			throw new TypeError(node.type);
