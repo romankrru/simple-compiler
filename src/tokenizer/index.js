@@ -62,6 +62,7 @@ function tokenizer(input) {
 			char = input[++current];
 
 			tokens.push({type: tokenTypes.STRING, value});
+			continue;
 		}
 
 		const LETTERS = /[a-z]/i;
