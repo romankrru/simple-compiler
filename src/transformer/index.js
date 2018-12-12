@@ -1,6 +1,6 @@
 // Transformer: takes the AST and passes it to traverser with a visitor.
 // Returns new AST.
-import traverser from '../traverser';
+import traverser from './traverser';
 
 function transformer(ast) {
 	let newAst = {
