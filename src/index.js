@@ -3,13 +3,19 @@ import parser from './parser';
 import transformer from './transformer';
 import codeGenerator from './code-generator';
 
-const tokens = tokenizer(
-`
-(add 1 4 (div 20 5))
-`
+const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);
+
+const compiler = pipe(
+	tokenizer,
+	parser,
+	transformer,
+	codeGenerator,
 );
 
-const ast = parser(tokens);
-const newAst = transformer(ast)
-const compiled = codeGenerator(newAst);
-console.log(compiled);
+const result = compiler(`
+(add 1 4 (div 20 5))
+(sub 2 1)
+(add (sub 2 1) (add 2 2))
+`);
+
+console.log(result);
