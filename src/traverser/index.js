@@ -1,5 +1,5 @@
 function traverser(ast, visitor) {
-	traverseArray(array, parent) {
+	function traverseArray(array, parent) {
 		array.forEach(child => {
 			traverseNode(child, parent);
 		});

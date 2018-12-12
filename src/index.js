@@ -1,5 +1,6 @@
 import tokenizer from './tokenizer';
 import parser from './parser';
+import transformer from './transformer';
 
 const tokens = tokenizer(
 `
@@ -9,4 +10,6 @@ const tokens = tokenizer(
 );
 
 const ast = parser(tokens);
+const newAst = transformer(ast)
 console.log(ast);
+console.log(newAst);
